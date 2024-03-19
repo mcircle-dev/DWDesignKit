@@ -7,7 +7,12 @@
 
 import UIKit
 
+import RxCocoa
+import RxSwift
+
 open class DWBaseViewController: UIViewController {
+    
+    public let disposeBag = DisposeBag()
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +20,7 @@ open class DWBaseViewController: UIViewController {
         configViewHierarchy()
         configLayoutConstraints()
         configViewSettings()
+        configRx()
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -29,4 +35,5 @@ open class DWBaseViewController: UIViewController {
     open func configViewHierarchy() { }
     open func configLayoutConstraints() { }
     open func configViewSettings() { }
+    open func configRx() { }
 }

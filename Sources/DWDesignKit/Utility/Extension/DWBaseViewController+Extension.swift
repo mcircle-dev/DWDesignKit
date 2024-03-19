@@ -15,6 +15,7 @@ extension DWBaseViewController {
         indicatorSize: CGFloat = 50,
         backgroundColor: UIColor = .black,
         backgroundOpacity: CGFloat = 0.7,
+        isAnimatingBackground: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         let dimmingView = UIView()
@@ -30,7 +31,6 @@ extension DWBaseViewController {
             .flexibleTopMargin,
             .flexibleBottomMargin
         ]
-        indicator.startAnimating()
         
         let keyWindow = UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -39,14 +39,20 @@ extension DWBaseViewController {
         keyWindow?.addSubview(dimmingView)
         keyWindow?.addSubview(indicator)
         
-        UIView.animate(
-            withDuration: 0.5,
-            delay: 0,
-            usingSpringWithDamping: 1.0,
-            initialSpringVelocity: 1.0,
-            options: .curveEaseInOut
-        ) {
-            dimmingView.alpha = 0.5
+        indicator.startAnimating()
+        
+        if isAnimatingBackground {
+            UIView.animate(
+                withDuration: 1.0,
+                delay: 0,
+                usingSpringWithDamping: 1.0,
+                initialSpringVelocity: 1.0,
+                options: .curveEaseInOut
+            ) {
+                if backgroundOpacity > 0.5 {
+                    dimmingView.alpha = 0.5
+                }
+            }
         }
         
         DimmingViewHandle.set(dimmingView)
@@ -69,6 +75,7 @@ extension DWBaseViewController {
                 options: .curveEaseInOut
             ) {
                 dimmingView.alpha = 0
+                
             } completion: { _ in
                 dimmingView.removeFromSuperview()
                 DimmingViewHandle.clear()
@@ -81,7 +88,7 @@ extension DWBaseViewController {
 
 final class ActivityIndicatorHandle {
     static var handle: UIActivityIndicatorView?
-
+    
     static func set(_ handle: UIActivityIndicatorView) {
         self.handle = handle
     }

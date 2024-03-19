@@ -13,8 +13,8 @@ import RxSwift
 extension Reactive where Base: DWBaseViewController {
     
     @available(iOS 13.0, *)
-    var isShowingActivityIndicator: Binder<Bool> {
-        return Binder(base) { base, value in
+    public var isShowingActivityIndicator: Binder<Bool> {
+        return Binder(base) { (base, value) in
             value ? base.showActivityIndicator() : base.hideActivityIndicator()
         }
     }

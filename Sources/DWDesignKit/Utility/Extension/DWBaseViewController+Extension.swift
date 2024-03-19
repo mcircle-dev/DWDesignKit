@@ -12,7 +12,7 @@ extension DWBaseViewController {
     @available(iOS 13.0, *)
     public func showActivityIndicator(
         indicatorColor: UIColor = .white,
-        indicatorSize: CGFloat = 50,
+        indicatorStyle: UIActivityIndicatorView.Style = .large,
         backgroundColor: UIColor = .black,
         backgroundOpacity: CGFloat = 0.7,
         isAnimatingBackground: Bool = true,
@@ -22,8 +22,9 @@ extension DWBaseViewController {
         dimmingView.backgroundColor = backgroundColor.withAlphaComponent(backgroundOpacity)
         dimmingView.frame = UIScreen.main.bounds
         
-        let indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: indicatorSize, height: indicatorSize))
+        let indicator = UIActivityIndicatorView()
         indicator.color = indicatorColor
+        indicator.style = indicatorStyle
         indicator.center = CGPoint(x: dimmingView.bounds.midX, y: dimmingView.bounds.midY)
         indicator.autoresizingMask = [
             .flexibleLeftMargin,

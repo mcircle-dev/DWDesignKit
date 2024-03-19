@@ -1,30 +1,20 @@
 //
-//  File.swift
-//  
+//  DWBaseTableViewCell.swift
+//
 //
 //  Created by Eunbee Kang on 3/18/24.
 //
 
 import UIKit
 
-import RxCocoa
-import RxSwift
-
-open class DWBaseViewController: UIViewController {
+open class DWBaseTableViewCell: UITableViewCell {
     
-    public let disposeBag = DisposeBag()
-    
-    override open func viewDidLoad() {
-        super.viewDidLoad()
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configViewHierarchy()
         configLayoutConstraints()
         configViewSettings()
-        configRx()
-    }
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     @available(*, unavailable)
@@ -35,5 +25,4 @@ open class DWBaseViewController: UIViewController {
     open func configViewHierarchy() { }
     open func configLayoutConstraints() { }
     open func configViewSettings() { }
-    open func configRx() { }
 }

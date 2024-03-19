@@ -1,13 +1,13 @@
 //
-//  File.swift
-//  
+//  DWBaseScrollViewController.swift
+//
 //
 //  Created by Eunbee Kang on 3/18/24.
 //
 
 import UIKit
 
-open class DWScrollBaseViewController: DWBaseViewController {
+open class DWBaseScrollViewController: DWBaseViewController {
     
     open var scrollView: UIScrollView = {
         let view = UIScrollView()

@@ -1,5 +1,5 @@
 //
-//  DWCollectionViewCell.swift
+//  DWBaseTableViewCell.swift
 //
 //
 //  Created by Eunbee Kang on 3/18/24.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-open class DWCollectionViewCell: UICollectionViewCell {
+open class DWBaseTableViewCell: UITableViewCell {
     
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configViewHierarchy()
         configLayoutConstraints()

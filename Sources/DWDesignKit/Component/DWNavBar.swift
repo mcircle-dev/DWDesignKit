@@ -7,26 +7,7 @@
 
 import UIKit
 
-public enum DWNavBarType {
-    case pushed
-    case leftCloseButton
-    case rightCloseButton
-    
-    var imageConfig: UIImage.SymbolConfiguration {
-        switch self {
-        case .pushed:
-            return UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
-            
-        case .leftCloseButton:
-            return UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
-            
-        case .rightCloseButton:
-            return UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
-        }
-    }
-}
-
-public final class DWNavBarView: DWBaseView {
+final class DWNavBarView: DWBaseView {
     
     private var leftNavBarItemStackView: UIStackView = {
         let stackView = UIStackView()
@@ -48,13 +29,13 @@ public final class DWNavBarView: DWBaseView {
         return stackView
     }()
     
-    public var leftBarButton: UIButton = {
+    var leftBarButton: UIButton = {
         let button = UIButton()
         
         return button
     }()
     
-    public var rightBarButton: UIButton = {
+    var rightBarButton: UIButton = {
         let button = UIButton()
         
         return button
@@ -69,26 +50,26 @@ public final class DWNavBarView: DWBaseView {
         return label
     }()
     
-    public var titleText: String? {
+    var titleText: String? {
         didSet {
             titleLabel.text = titleText
         }
     }
     
-    public var titleColor: UIColor? {
+    var titleColor: UIColor? {
         didSet {
             titleLabel.textColor = titleColor
         }
     }
     
-    public var buttonColor: UIColor? {
+    var buttonColor: UIColor? {
         didSet {
             leftBarButton.tintColor = buttonColor
             rightBarButton.tintColor = buttonColor
         }
     }
     
-    public var barHeight: CGFloat = 44 {
+    var barHeight: CGFloat = 44 {
         didSet {
             if barHeight < 44 { barHeight = 44 }
             heightAnchor.constraint(equalToConstant: barHeight).isActive = true
@@ -96,36 +77,33 @@ public final class DWNavBarView: DWBaseView {
     }
     
     func configBarButtons(_ type: DWNavBarType) {
-        let config = type.imageConfig
+        let config = UIImage.SymbolConfiguration(pointSize: type.imageSize, weight: .semibold)
+        let image = UIImage(systemName: type.systemImageName, withConfiguration: config)
         
         switch type {
-        case .pushed:
-            leftBarButton.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-            leftNavBarItemStackView.addArrangedSubview(leftBarButton)
-            
-        case .leftCloseButton:
-            leftBarButton.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
+        case .pushed, .leftCloseButton:
+            leftBarButton.setImage(image, for: .normal)
             leftNavBarItemStackView.addArrangedSubview(leftBarButton)
             
         case .rightCloseButton:
-            rightBarButton.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
+            rightBarButton.setImage(image, for: .normal)
             rightNavBarItemStackView.addArrangedSubview(rightBarButton)
         }
     }
 
-    public override func configViewSettings() {
+    override func configViewSettings() {
         [leftNavBarItemStackView, rightNavBarItemStackView, titleLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
-    public override func configViewHierarchy() {
+    override func configViewHierarchy() {
         addSubview(leftNavBarItemStackView)
         addSubview(rightNavBarItemStackView)
         addSubview(titleLabel)
     }
     
-    public override func configLayoutConstraints() {
+    override func configLayoutConstraints() {
         NSLayoutConstraint.activate([
             leftNavBarItemStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             leftNavBarItemStackView.centerYAnchor.constraint(equalTo: centerYAnchor),

@@ -62,12 +62,23 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
+    public var isSwipeBackGestureEnabled: Bool = true {
+        didSet {
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = isSwipeBackGestureEnabled
+        }
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
         addCustomNavBarView()
         setContentView()
+        
+        setBackButtonAction(popAction())
+        setCloseButtonAction(dismissAction())
     }
+    
+    // MARK: - Public helpers
     
     public func addCustomNavBarView(
         with type: DWNavBarType = .pushed,
@@ -75,7 +86,7 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         backgroundColor: UIColor = .clear,
         height: CGFloat = 44
     ) {
-        setNativeNavigation()
+        setNativeNavigationController()
         
         navTitle = title
         navBarBackgroundColor = backgroundColor
@@ -115,10 +126,49 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
+    public func setBackButtonAction(_ action: @escaping () -> Void) {
+        navBar.leftBarBackButton.rx.tap
+            .bind(with: self) { owner, _ in
+                action()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    public func setCloseButtonAction(_ action: @escaping () -> Void) {
+        navBar.leftBarCloseButton.rx.tap
+            .bind(with: self) { owner, _ in
+                action()
+            }
+            .disposed(by: disposeBag)
+        
+        navBar.rightBarCloseButton.rx.tap
+            .bind(with: self) { owner, _ in
+                action()
+            }
+            .disposed(by: disposeBag)
+    }
+    
     // MARK: - Private helpers
     
-    private func setNativeNavigation() {
+    private func popAction() -> (() -> Void) {
+        let pop = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+            print("")
+        }
+        return pop
+    }
+    
+    private func dismissAction() -> (() -> Void) {
+        let dismiss = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+            print("")
+        }
+        return dismiss
+    }
+    
+    private func setNativeNavigationController() {
         navigationController?.isNavigationBarHidden = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     private func setContentView() {
@@ -134,5 +184,13 @@ open class DWBaseNavBarViewController: DWBaseViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+
+extension DWBaseNavBarViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        navigationController?.viewControllers.count ?? 1 > 1
     }
 }

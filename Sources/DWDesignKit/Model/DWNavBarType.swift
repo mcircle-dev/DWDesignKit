@@ -31,4 +31,14 @@ public enum DWNavBarType {
             return "xmark"
         }
     }
+    
+    var leadingInset: CGFloat {
+        switch self {
+        case .pushed:
+            return 8
+            
+        case .leftCloseButton, .rightCloseButton:
+            return 16
+        }
+    }
 }

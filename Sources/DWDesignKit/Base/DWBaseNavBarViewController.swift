@@ -56,6 +56,12 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
+    public var navBarType: DWNavBarType = .pushed {
+        didSet {
+            navBar.barType = navBarType
+        }
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,7 +80,7 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         navTitle = title
         navBarBackgroundColor = backgroundColor
         navBar.barHeight = height
-        navBar.configBarButtons(type)
+        navBar.barType = type
         
         if view.subviews.contains(navBar) { return }
         

@@ -29,17 +29,9 @@ final class DWNavBarView: DWBaseView {
         return stackView
     }()
     
-    var leftBarButton: UIButton = {
-        let button = UIButton()
-        
-        return button
-    }()
-    
-    var rightBarButton: UIButton = {
-        let button = UIButton()
-        
-        return button
-    }()
+    var leftBarCloseButton = DWNavBarButton(type: .leftCloseButton)
+    var rightBarCloseButton = DWNavBarButton(type: .rightCloseButton)
+    var leftBarBackButton = DWNavBarButton(type: .pushed)
     
     private var titleLabel: UILabel = {
         let label = UILabel()
@@ -64,8 +56,9 @@ final class DWNavBarView: DWBaseView {
     
     var buttonColor: UIColor? {
         didSet {
-            leftBarButton.tintColor = buttonColor
-            rightBarButton.tintColor = buttonColor
+            leftBarCloseButton.tintColor = buttonColor
+            rightBarCloseButton.tintColor = buttonColor
+            leftBarBackButton.tintColor = buttonColor
         }
     }
     
@@ -83,18 +76,40 @@ final class DWNavBarView: DWBaseView {
         }
     }
     
-    func configBarButtons(_ type: DWNavBarType) {
-        let config = UIImage.SymbolConfiguration(pointSize: type.imageSize, weight: .semibold)
-        let image = UIImage(systemName: type.systemImageName, withConfiguration: config)
-        
-        switch type {
-        case .pushed, .leftCloseButton:
-            leftBarButton.setImage(image, for: .normal)
-            leftNavBarItemStackView.addArrangedSubview(leftBarButton)
+    var barType: DWNavBarType = .pushed {
+        didSet {
+            removeBarButtons()
+            configBarButtons()
+            
+            leftStackViewLeadingConstraint = leftNavBarItemStackView.leadingAnchor.constraint(
+                equalTo: leadingAnchor, 
+                constant: barType.leadingInset
+            )
+        }
+    }
+    
+    private var leftStackViewLeadingConstraint: NSLayoutConstraint? {
+        didSet {
+            oldValue?.isActive = false
+            leftStackViewLeadingConstraint?.isActive = true
+        }
+    }
+    
+    private func removeBarButtons() {
+        leftNavBarItemStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        rightNavBarItemStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    private func configBarButtons() {
+        switch barType {
+        case .pushed:
+            leftNavBarItemStackView.addArrangedSubview(leftBarBackButton)
+                
+        case .leftCloseButton:
+            leftNavBarItemStackView.addArrangedSubview(leftBarCloseButton)
             
         case .rightCloseButton:
-            rightBarButton.setImage(image, for: .normal)
-            rightNavBarItemStackView.addArrangedSubview(rightBarButton)
+            rightNavBarItemStackView.addArrangedSubview(rightBarCloseButton)
         }
     }
 
@@ -112,7 +127,6 @@ final class DWNavBarView: DWBaseView {
     
     override func configLayoutConstraints() {
         NSLayoutConstraint.activate([
-            leftNavBarItemStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             leftNavBarItemStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             leftNavBarItemStackView.topAnchor.constraint(equalTo: topAnchor),
             leftNavBarItemStackView.bottomAnchor.constraint(equalTo: bottomAnchor),

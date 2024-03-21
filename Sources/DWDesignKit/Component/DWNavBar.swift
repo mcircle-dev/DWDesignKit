@@ -72,7 +72,14 @@ final class DWNavBarView: DWBaseView {
     var barHeight: CGFloat = 44 {
         didSet {
             if barHeight < 44 { barHeight = 44 }
-            heightAnchor.constraint(equalToConstant: barHeight).isActive = true
+            barHeightAnchor = heightAnchor.constraint(equalToConstant: barHeight)
+        }
+    }
+    
+    private var barHeightAnchor: NSLayoutConstraint? {
+        didSet {
+            oldValue?.isActive = false
+            barHeightAnchor?.isActive = true
         }
     }
     

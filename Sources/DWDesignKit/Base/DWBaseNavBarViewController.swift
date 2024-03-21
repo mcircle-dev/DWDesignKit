@@ -17,6 +17,12 @@ open class DWBaseNavBarViewController: DWBaseViewController {
     
     private var navBar = DWNavBarView()
     
+    public var contentView: UIView  = {
+        let view = UIView()
+        
+        return view
+    }()
+    
     // MARK: - Public properties for custom navigation bar
     
     public var navTitle: String = "" {
@@ -37,25 +43,40 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
-    public var dwNavBarBackgroundColor: UIColor? {
+    public var navBarBackgroundColor: UIColor? {
         didSet {
-            upperBackgroundView.backgroundColor = dwNavBarBackgroundColor
-            navBar.backgroundColor = dwNavBarBackgroundColor
+            upperBackgroundView.backgroundColor = navBarBackgroundColor
+            navBar.backgroundColor = navBarBackgroundColor
         }
+    }
+    
+    public var navBarHeight: CGFloat = 44 {
+        didSet {
+            navBar.barHeight = navBarHeight
+        }
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        addCustomNavBarView()
+        setContentView()
     }
     
     public func addCustomNavBarView(
         with type: DWNavBarType = .pushed,
         title: String = "",
-        backgroundColor: UIColor = .white,
+        backgroundColor: UIColor = .clear,
         height: CGFloat = 44
     ) {
         setNativeNavigation()
         
         navTitle = title
-        dwNavBarBackgroundColor = backgroundColor
+        navBarBackgroundColor = backgroundColor
         navBar.barHeight = height
         navBar.configBarButtons(type)
+        
+        if view.subviews.contains(navBar) { return }
         
         view.addSubview(upperBackgroundView)
         view.addSubview(navBar)
@@ -76,6 +97,10 @@ open class DWBaseNavBarViewController: DWBaseViewController {
     }
     
     public func removeCustomNavBarView() {
+        contentView.removeFromSuperview()
+        view.addSubview(contentView)
+        setContentViewConstraints(withTopAnchor: view.topAnchor)
+        
         if view.subviews.contains(upperBackgroundView) {
             upperBackgroundView.removeFromSuperview()
         }
@@ -88,5 +113,20 @@ open class DWBaseNavBarViewController: DWBaseViewController {
     
     private func setNativeNavigation() {
         navigationController?.isNavigationBarHidden = true
+    }
+    
+    private func setContentView() {
+        view.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        setContentViewConstraints(withTopAnchor: navBar.bottomAnchor)
+    }
+    
+    private func setContentViewConstraints(withTopAnchor anchor: NSLayoutYAxisAnchor) {
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: anchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }

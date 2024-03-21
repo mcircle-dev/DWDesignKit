@@ -9,7 +9,6 @@ import UIKit
 
 extension DWBaseViewController {
     
-    @available(iOS 13.0, *)
     public func showActivityIndicator(
         indicatorColor: UIColor = .white,
         indicatorStyle: UIActivityIndicatorView.Style = .large,

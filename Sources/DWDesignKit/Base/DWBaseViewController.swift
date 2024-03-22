@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  DWBaseViewController.swift
+//
 //
 //  Created by Eunbee Kang on 3/18/24.
 //
@@ -14,15 +14,6 @@ open class DWBaseViewController: UIViewController {
     
     public let disposeBag = DisposeBag()
     
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configViewHierarchy()
-        configLayoutConstraints()
-        configViewSettings()
-        configRx()
-    }
-    
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -30,6 +21,17 @@ open class DWBaseViewController: UIViewController {
     @available(*, unavailable)
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
+        
+        configViewHierarchy()
+        configLayoutConstraints()
+        configViewSettings()
+        configRx()
     }
     
     open func configViewHierarchy() { }

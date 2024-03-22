@@ -12,6 +12,8 @@ open class DWBaseTableViewCell: UITableViewCell {
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        selectionStyle = .none
+        
         configViewHierarchy()
         configLayoutConstraints()
         configViewSettings()

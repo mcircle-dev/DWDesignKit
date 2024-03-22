@@ -26,6 +26,8 @@ open class DWBaseViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .systemBackground
+        
         configViewHierarchy()
         configLayoutConstraints()
         configViewSettings()

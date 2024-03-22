@@ -80,11 +80,6 @@ final class DWNavBarView: DWBaseView {
         didSet {
             removeBarButtons()
             configBarButtons()
-            
-            leftStackViewLeadingConstraint = leftNavBarItemStackView.leadingAnchor.constraint(
-                equalTo: leadingAnchor, 
-                constant: barType.leadingInset
-            )
         }
     }
     
@@ -127,11 +122,12 @@ final class DWNavBarView: DWBaseView {
     
     override func configLayoutConstraints() {
         NSLayoutConstraint.activate([
+            leftNavBarItemStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             leftNavBarItemStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             leftNavBarItemStackView.topAnchor.constraint(equalTo: topAnchor),
             leftNavBarItemStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            rightNavBarItemStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            rightNavBarItemStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             rightNavBarItemStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             rightNavBarItemStackView.topAnchor.constraint(equalTo: topAnchor),
             rightNavBarItemStackView.bottomAnchor.constraint(equalTo: bottomAnchor),

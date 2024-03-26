@@ -26,7 +26,7 @@ open class DWBaseViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        configAppearance()
         
         configViewHierarchy()
         configLayoutConstraints()
@@ -38,4 +38,12 @@ open class DWBaseViewController: UIViewController {
     open func configLayoutConstraints() { }
     open func configViewSettings() { }
     open func configRx() { }
+    
+    open func configAppearance() {
+        DWAppearanceManager.shared.publisher.asDriver()
+            .drive(with: self) { owner, appearance in
+                owner.view.backgroundColor = appearance.mainBackgroundColor
+            }
+            .disposed(by: disposeBag)
+    }
 }

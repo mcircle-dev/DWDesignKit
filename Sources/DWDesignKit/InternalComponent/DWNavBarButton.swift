@@ -7,22 +7,16 @@
 
 import UIKit
 
-final class DWNavBarButton: UIButton {
+final class DWNavBarButton: DWBaseButton {
         
     private var type: DWNavBarType
     
     init(type: DWNavBarType) {
         self.type = type
         super.init(frame: .zero)
+    }
         
-        configButton()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configButton() {
+    override func configView() {
         let config = UIImage.SymbolConfiguration(pointSize: type.imageSize, weight: .semibold)
         let image = UIImage(systemName: type.systemImageName, withConfiguration: config)
         setImage(image, for: .normal)

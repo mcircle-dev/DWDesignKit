@@ -9,6 +9,8 @@ import UIKit
 
 open class DWBaseNavBarViewController: DWBaseViewController {
     
+    private let appearanceManager = DWAppearanceManager.shared
+    
     private var upperBackgroundView: UIView = {
         let view = UIView()
         
@@ -31,22 +33,21 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
-    public var navTitleColor: UIColor = .black {
+    public lazy var navTitleColor: UIColor = appearanceManager.appearance.navBarTitleColor {
         didSet {
-            navBar.titleColor = navTitleColor
+            appearanceManager.appearance.navBarTitleColor = navTitleColor
         }
     }
     
-    public var navButtonColor: UIColor = .black {
+    public lazy var navButtonColor: UIColor = appearanceManager.appearance.navBarButtonColor {
         didSet {
-            navBar.buttonColor = navButtonColor
+            appearanceManager.appearance.navBarButtonColor = navButtonColor
         }
     }
     
-    public var navBarBackgroundColor: UIColor? {
+    public lazy var navBarBackgroundColor: UIColor = appearanceManager.appearance.navBarBackgroundColor {
         didSet {
-            upperBackgroundView.backgroundColor = navBarBackgroundColor
-            navBar.backgroundColor = navBarBackgroundColor
+            appearanceManager.appearance.navBarBackgroundColor = navBarBackgroundColor
         }
     }
     
@@ -68,6 +69,8 @@ open class DWBaseNavBarViewController: DWBaseViewController {
         }
     }
     
+    // MARK: - Lifecycle
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,13 +86,11 @@ open class DWBaseNavBarViewController: DWBaseViewController {
     public func addCustomNavBarView(
         with type: DWNavBarType = .pushed,
         title: String = "",
-        backgroundColor: UIColor = .clear,
         height: CGFloat = 44
     ) {
         setNativeNavigationController()
         
         navTitle = title
-        navBarBackgroundColor = backgroundColor
         navBar.barHeight = height
         navBar.barType = type
         
@@ -184,6 +185,19 @@ open class DWBaseNavBarViewController: DWBaseViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    open override func configAppearance() {
+        super.configAppearance()
+        
+        appearanceManager.publisher.asDriver()
+            .drive(with: self) { owner, value in
+                owner.upperBackgroundView.backgroundColor = value.navBarBackgroundColor
+                owner.navBar.backgroundColor = value.navBarBackgroundColor
+                owner.navBar.titleColor = value.navBarTitleColor
+                owner.navBar.buttonColor = value.navBarButtonColor
+            }
+            .disposed(by: disposeBag)
     }
 }
 
